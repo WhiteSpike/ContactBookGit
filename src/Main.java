@@ -13,6 +13,8 @@ public class Main {
     public static final String SET_PHONE      = "SP";
     public static final String SET_EMAIL      = "SE";
     public static final String LIST_CONTACTS  = "LC";
+    public static final String LOOKUP_PHONE_CONTACT = "GN";
+    public static final String CHECK_FOR_DUPLICATES = "EP";
     public static final String QUIT           = "Q";
 
     //Constantes que definem as mensagens para o utilizador
@@ -22,6 +24,9 @@ public class Main {
     public static final String CONTACT_REMOVED = "contactBook.Contact removed.";
     public static final String CONTACT_UPDATED = "contactBook.Contact updated.";
     public static final String BOOK_EMPTY = "contactBook.Contact book empty.";
+    public static final String PHONE_NUMBER_NOT_EXIST = "Phone number does not exist.";
+    public static final String DUPLICATE_EXIST = "There are contacts that share phone numbers.";
+    public static final String DUPLICATE_NOT_EXIST = "All contacts have different phone numbers.";
     public static final String QUIT_MSG = "Goodbye!";
     public static final String COMMAND_ERROR = "Unknown command.";
 
@@ -53,6 +58,12 @@ public class Main {
                 case LIST_CONTACTS:
                     listAllContacts(cBook);
                     break;
+                case LOOKUP_PHONE_CONTACT:
+                	listPhoneNumberContact(in, cBook);
+                	break;
+                case CHECK_FOR_DUPLICATES:
+                	checkDuplicatePhoneNumbers(cBook);
+                	break;
                 default:
                     System.out.println(COMMAND_ERROR);
             }
@@ -146,5 +157,22 @@ public class Main {
             }
         }
         else System.out.println(BOOK_EMPTY);
+    }
+    
+    private static void listPhoneNumberContact(Scanner in, ContactBook cBook) {
+    	int phone;
+    	phone = in.nextInt();
+    	Contact ct = cBook.getContactWithPhone(phone);
+    	if (ct != null) {
+    		System.out.printf("Nome: %s  Mail: %s  Numero:%d", ct.getName(), ct.getEmail(), ct.getPhone());
+    	} else System.out.println(PHONE_NUMBER_NOT_EXIST);
+    }
+    
+    private static void checkDuplicatePhoneNumbers(ContactBook cBook) {
+    	
+    	if(cBook.hasRepeatedContacts())
+    		System.out.println(DUPLICATE_EXIST);
+    	else System.out.println(DUPLICATE_NOT_EXIST);
+    	
     }
 }
